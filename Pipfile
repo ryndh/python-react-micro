@@ -9,6 +9,7 @@ flask = "*"
 flask-sqlalchemy = "*"
 gunicorn = "*"
 flask-cors = "*"
+flask-heroku = "*"
 
 [dev-packages]
 
