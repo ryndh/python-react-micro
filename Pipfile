@@ -10,6 +10,9 @@ flask-sqlalchemy = "*"
 gunicorn = "*"
 flask-cors = "*"
 flask-heroku = "*"
+"beautifulsoup4" = "*"
+requests = "*"
+regex = "*"
 
 [dev-packages]
 
