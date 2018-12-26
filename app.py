@@ -53,7 +53,7 @@ def movies_input():
             movie_update = Movie.query.filter_by(title=movie_name).first()
             movie_update.entries = movie_update.entries + 1
             db.session.commit()
-            return jsonify('Movie already in database')
+            return jsonify('Movie already in database, updated number!')
         else: 
             db.session.add(reg)
             db.session.commit()
