@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup as BS
 import requests
 import regex as RE
 
-
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://kgiwkefesonugp:57e3f0bab3cb23d1f88375c351616ddd83e70b34c721785cc380c150a0ad16be@ec2-184-72-239-186.compute-1.amazonaws.com:5432/dfasnfr84q1b8j'
@@ -27,6 +26,19 @@ class Movie(db.Model):
     
     def __repr__(self):
         return '<Title %r>' % self.title
+
+## Not really part of the movies app...just added this to be quick and lazy as I try to see visitors I'm getting to portfolio site.
+class Visitors(db.Model):
+    __tablename__ = 'visitors'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(120))
+
+    def __init__(self, date):
+        self.date = date
+    
+    def __repr__(self):
+        return '<Date %r>' % self.date
+########
 
 @app.route('/')
 def home():
@@ -81,7 +93,25 @@ def movies_return():
         all_movies = db.session.query(Movie.title, Movie.year, Movie.entries).all()
         return jsonify(all_movies)
 
+## Not really part of the movies app...just added this to be quick and lazy as I try to see visitors I'm getting to portfolio site.
+@app.route('/visitor', methods=['POST'])
+def visitors():
+    if request.content_type == 'application/json':
+        data = request.get_json()
+        current_date = data.get('date')
+        reg = Visitors(current_date)
+        db.session.add(reg)
+        db.session.commit()
+        return jsonify('Logged')
+    return jsonify('Logging Issue')
+
+@app.route('/visitor_times')
+def show_all():
+    if request.method == 'GET':
+        all_times = db.session.query(Visitors.date).all()
+        return jsonify(all_times)
+########
+
 if __name__ == '__main__':
     app.debug = True
     app.run()
-
