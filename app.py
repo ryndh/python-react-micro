@@ -27,22 +27,9 @@ class Movie(db.Model):
     def __repr__(self):
         return '<Title %r>' % self.title
 
-## Not really part of the movies app...just added this to be quick and lazy as I try to see visitors I'm getting to portfolio site.
-class Visitors(db.Model):
-    __tablename__ = 'visitors'
-    id = db.Column(db.Integer, primary_key=True)
-    date = db.Column(db.String(120))
-
-    def __init__(self, date):
-        self.date = date
-    
-    def __repr__(self):
-        return '<Date %r>' % self.date
-########
-
 @app.route('/')
 def home():
-    return '<h1>Hello</h1>'
+    return '<h1> Hello </h1>'
 
 @app.route('/movies_input', methods=['POST'])
 def movies_input():
@@ -92,25 +79,6 @@ def movies_return():
     if request.method == 'GET':
         all_movies = db.session.query(Movie.title, Movie.year, Movie.entries).all()
         return jsonify(all_movies)
-
-## Not really part of the movies app...just added this to be quick and lazy as I try to see visitors I'm getting to portfolio site.
-@app.route('/visitor', methods=['POST'])
-def visitors():
-    if request.content_type == 'application/json':
-        data = request.get_json()
-        current_date = data.get('date')
-        reg = Visitors(current_date)
-        db.session.add(reg)
-        db.session.commit()
-        return jsonify('Logged')
-    return jsonify('Logging Issue')
-
-@app.route('/visitor_times')
-def show_all():
-    if request.method == 'GET':
-        all_times = db.session.query(Visitors.date).all()
-        return jsonify(all_times)
-########
 
 if __name__ == '__main__':
     app.debug = True
